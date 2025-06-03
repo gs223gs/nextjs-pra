@@ -1,0 +1,61 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Next.js
+.next/
+out/
+build/
+
+# Local env files
+.env
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+
+# pnpm
+.pnpm-store/
+
+# Optional: coverage reports
+coverage/
+
+# Optional: logs
+logs
+*.log
+
+# Optional: typescript cache
+*.tsbuildinfo
+
+# Optional: vercel
+.vercel/
+
+# Optional: local test databases
+*.sqlite
+
+# Optional: Mac system files
+.AppleDouble
+.LSOverride
+
+# Optional: Windows system files
+ehthumbs.db
+Icon?
+Desktop.ini
+
+# Optional: Linux system files
+*~
+
+# Optional: next export
+out/
