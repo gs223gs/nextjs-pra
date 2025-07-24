@@ -48,6 +48,13 @@ export default function Home() {
               </li>
             </ul>
           </section>
+
+          <section>
+            <h2 className="text-xl font-semibold mb-2">ブログ</h2>
+            <Link href="/blog" className="text-blue-600 hover:underline">
+              ブログ一覧を見る
+            </Link>
+          </section>
         </div>
       </main>
     </div>
