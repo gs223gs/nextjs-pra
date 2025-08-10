@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { formSchema, FormSchema } from "@/validations/form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
+import { submitForm } from "./actions";
 export default function Home() {
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
@@ -27,11 +27,17 @@ export default function Home() {
     },
   });
 
-  function onSubmit(data: FormSchema) {
-    console.log(data);
+  async function onSubmit(data: FormData) {
+    const result = await submitForm(data);
+    console.log(result);
+    if (result.success) {
+      console.log("フォームが正常に送信されました");
+    } else {
+      console.log("フォームの送信に失敗しました");
+    }
   }
   return (
-    <Form {...form} >
+    <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-10">
         <FormField
           control={form.control}
