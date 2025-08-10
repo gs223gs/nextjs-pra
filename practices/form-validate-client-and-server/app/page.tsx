@@ -27,7 +27,7 @@ export default function Home() {
     },
   });
 
-  async function onSubmit(data: FormData) {
+  async function onSubmit(data: FormSchema) {
     const result = await submitForm(data);
     console.log(result);
     if (result.success) {

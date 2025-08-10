@@ -3,11 +3,7 @@ import { FormSchema, formSchema } from "@/validations/form";
 import { z } from "zod";
 
 export async function submitForm(formData: FormSchema) {
-  const validatedFields = formSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    message: formData.get("message"),
-  });
+  const validatedFields = formSchema.safeParse(formData);
 
   if (!validatedFields.success) {
     return {
