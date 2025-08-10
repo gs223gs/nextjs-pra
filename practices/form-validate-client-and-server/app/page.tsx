@@ -1,3 +1,5 @@
+'use client';
+
 import { formSchema, FormSchema } from "@/validations/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -29,8 +31,8 @@ export default function Home() {
     console.log(data);
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <Form {...form} >
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-10">
         <FormField
           control={form.control}
           name="name"
