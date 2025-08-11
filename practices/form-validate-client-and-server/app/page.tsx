@@ -17,7 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { submitForm } from "./actions";
+import { useRouter } from "next/navigation";
 export default function Home() {
+  const router = useRouter();
   const form = useForm<FormSchema>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -32,6 +34,7 @@ export default function Home() {
     console.log(result);
     if (result.success) {
       console.log("フォームが正常に送信されました");
+      router.push("/success");
     } else {
       console.log("フォームの送信に失敗しました");
     }
