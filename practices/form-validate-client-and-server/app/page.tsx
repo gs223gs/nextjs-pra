@@ -5,6 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
 import {
   Form,
   FormControl,
@@ -37,57 +39,65 @@ export default function Home() {
       router.push("/success");
     } else {
       console.log("フォームの送信に失敗しました");
+      toast.error("フォームの送信に失敗しました");
     }
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-10">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>名前</FormLabel>
-              <FormControl>
-                <Input placeholder="名前" {...field} />
-              </FormControl>
-              <FormDescription>これはあなたの公開表示名です。</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>メールアドレス</FormLabel>
-              <FormControl>
-                <Input placeholder="メールアドレス" {...field} />
-              </FormControl>
-              <FormDescription>
-                これはあなたのメールアドレスです。
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="message"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>メッセージ</FormLabel>
-              <FormControl>
-                <Textarea placeholder="メッセージ" {...field} />
-              </FormControl>
-              <FormDescription>これはあなたのメッセージです。</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button type="submit">送信</Button>
-      </form>
-    </Form>
+    <div>
+      <Toaster richColors position="top-center" />
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 m-10">
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>名前</FormLabel>
+                <FormControl>
+                  <Input placeholder="名前" {...field} />
+                </FormControl>
+                <FormDescription>
+                  これはあなたの公開表示名です。
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>メールアドレス</FormLabel>
+                <FormControl>
+                  <Input placeholder="メールアドレス" {...field} />
+                </FormControl>
+                <FormDescription>
+                  これはあなたのメールアドレスです。
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="message"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>メッセージ</FormLabel>
+                <FormControl>
+                  <Textarea placeholder="メッセージ" {...field} />
+                </FormControl>
+                <FormDescription>
+                  これはあなたのメッセージです。
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">送信</Button>
+        </form>
+      </Form>
+    </div>
   );
 }
