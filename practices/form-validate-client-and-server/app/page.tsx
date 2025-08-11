@@ -35,11 +35,8 @@ export default function Home() {
     const result = await submitForm(data);
     console.log(result);
     if (result.success) {
-      console.log("フォームが正常に送信されました");
       router.push("/success");
     } else {
-      console.log("フォームの送信に失敗しました");
-      toast.error("フォームの送信に失敗しました");
     }
   }
   return (
