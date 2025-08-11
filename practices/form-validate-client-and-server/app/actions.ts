@@ -23,7 +23,7 @@ export async function submitForm(formData: FormSchema) {
     return {
       success: true,
     };
-  } catch (error) {
+  } catch {
     return {
       success: false,
     };
