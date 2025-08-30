@@ -2,15 +2,12 @@ import { fetchLaprasProfile } from "../actions";
 import type { LaprasScore, LaprasBasicInfo } from "../types/lapras";
 import { ScoreCard } from "../components/ScoreCard";
 
-type ScorePageData = LaprasBasicInfo & LaprasScore;
+
 
 export default async function ScoresPage() {
   const profile = await fetchLaprasProfile();
 
-  const scoreData: ScorePageData = {
-    name: profile.name,
-    description: profile.description,
-    iconimage_url: profile.iconimage_url,
+  const scoreData: LaprasScore = {
     e_score: profile.e_score,
     b_score: profile.b_score,
     i_score: profile.i_score,
