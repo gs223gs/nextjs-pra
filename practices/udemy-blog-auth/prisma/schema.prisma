@@ -1,15 +1,132 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// ====================================================================
+// Prismaスキーマファイル - データベースの構造を定義
+// Javaで例えるなら、JPA（Java Persistence API）のEntityクラスの定義に相当
+// このファイルから、TypeScript用の型定義とSQLが自動生成される
+// ====================================================================
 
 // Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
+// ====================================================================
+// ジェネレーター設定 - Prismaクライアントコードの生成設定
+// Javaで言うと、JPAのEntityManagerやRepositoryインターフェースを自動生成する設定に相当
+// ====================================================================
 generator client {
+  // 生成するクライアントの種類（JavaScriptクライアント）
+  // Javaで言うと、Hibernateなどの実装プロバイダーの指定に相当
   provider = "prisma-client-js"
+
+  // 生成されたコードの出力先ディレクトリ
+  // デフォルトはnode_modules/.prisma/clientだが、カスタマイズ可能
   output   = "../app/generated/prisma"
 }
 
+// ====================================================================
+// データソース設定 - データベース接続の設定
+// Javaで言うと、persistence.xmlやapplication.propertiesでのDB接続設定に相当
+// ====================================================================
 datasource db {
+  // データベースの種類（SQLite）
+  // 他にもpostgresql、mysql、sqlserver、mongodbなどが使用可能
+  // JavaのJDBCドライバーの指定に相当
   provider = "sqlite"
+
+  // データベース接続URL（環境変数から取得）
+  // env()関数で.envファイルから環境変数を読み込む
+  // JavaのDataSourceやConnectionStringの設定に相当
   url      = env("DATABASE_URL")
+}
+
+// ====================================================================
+// Userモデル（テーブル）の定義
+// Javaで言うと@Entityアノテーション付きのクラスに相当
+// このモデルから「users」テーブルが作成される（Prismaは自動的に複数形に変換）
+// ====================================================================
+model User {
+  // プライマリキー設定
+  // @id: JavaのJPAで言う@Idアノテーションに相当
+  // @default(cuid()): 自動的にユニークなIDを生成（Collision-resistant Unique ID）
+  // JavaのUUID.randomUUID()やGenerationType.AUTOに相当
+  id String @id @default(cuid())
+
+  // メールアドレス（ユニーク制約付き）
+  // @unique: JavaのJPAで言う@Column(unique = true)に相当
+  // データベースレベルでの重複を防ぐ
+  email String @unique
+
+  // パスワード（必須フィールド）
+  // String型で?がないため必須（NOT NULL制約）
+  // JavaでいうとNullableアノテーションがない状態
+  password String
+
+  // 名前（オプショナル）
+  // String?: ?はオプショナルを意味し、NULLを許可
+  // JavaのOptional<String>やNullableアノテーション付きフィールドに相当
+  name String?
+
+  // 1対多のリレーション - ユーザーは複数の投稿を持つ
+  // Post[]: 配列型でPostモデルとの関係を定義
+  // JavaのJPAで言う@OneToMany(mappedBy = "author")に相当
+  // 実際のDBにはこのカラムは作成されない（仮想的なリレーション）
+  posts Post[]
+
+  // 作成日時（自動設定）
+  // @default(now()): レコード作成時に現在時刻を自動設定
+  // JavaのJPAで言う@CreationTimestampやPrePersistに相当
+  createdAt DateTime @default(now())
+
+  // 更新日時（自動更新）
+  // @updatedAt: レコード更新時に自動的に現在時刻に更新
+  // JavaのJPAで言う@LastModifiedDateやPreUpdateに相当
+  updatedAt DateTime @updatedAt
+}
+
+// ====================================================================
+// Postモデル（テーブル）の定義
+// ブログ投稿を表すエンティティ
+// JavaのJPAで言う@Entityクラスに相当
+// ====================================================================
+model Post{
+  // プライマリキー
+  // cuid(): Collision-resistant Unique IDを自動生成
+  // 分散システムでも衝突しにくいID生成方式
+  id String @id @default(cuid())
+
+  // 投稿タイトル（必須）
+  // NOT NULL制約が自動的に適用される
+  title String
+
+  // 投稿内容（必須）
+  // SQLiteではTEXT型として保存される
+  content String
+
+  // トップ画像のURL（オプショナル）
+  // ?によりNULL許可、画像がない投稿も可能
+  // JavaのOptional<String>に相当
+  topImage String?
+
+  // 公開状態フラグ
+  // @default(true): デフォルトで公開状態
+  // JavaのBoolean型フィールドでdefaultValueを設定するのに相当
+  published Boolean @default(true)
+
+  // 外部キー - 投稿者のユーザーID
+  // UserモデルのIDを参照（実際のDBカラム）
+  // JavaのJPAで言う@JoinColumn(name = "authorId")に相当
+  authorId String
+
+  // リレーション定義 - 多対1の関係（多くの投稿は1人のユーザーに属する）
+  // JavaのJPAで言う@ManyToOne + @JoinColumnに相当
+  // fields: このモデルのどのフィールドが外部キーか指定
+  // references: 参照先モデルのどのフィールドを参照するか指定
+  // onDelete: Cascade - ユーザーが削除されたら投稿も削除（CASCADE DELETE）
+  // JavaのCascadeType.REMOVEやorphanRemoval = trueに相当
+  author User @relation(fields:[authorId], references:[id], onDelete: Cascade)
+
+  // タイムスタンプフィールド
+  // 作成日時と更新日時を自動管理
+  // JavaのAuditingEntityListenerを使った場合と同様の動作
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
 }
