@@ -25,11 +25,7 @@ export default function PublichHeder() {
                   <NavigationMenuLink>Posts</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-              <NavigationMenuItem>
-                <Link href="/login">
-                  <NavigationMenuLink>Login</NavigationMenuLink>
-                </Link>
-              </NavigationMenuItem>
+
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex items-center gap-4">
