@@ -1,7 +1,7 @@
 // Prismaクライアントのインスタンスをインポート
 // @/lib/prisma は tsconfig.json で設定されたエイリアス（@はプロジェクトルートを指す）
 import { prisma } from "@/lib/prisma";
-
+import {Post} from "@/types/post";
 /**
  * 公開済みの投稿一覧を取得する関数
  *
@@ -10,7 +10,7 @@ import { prisma } from "@/lib/prisma";
  * - 戻り値は自動的にPromiseでラップされる
  * - この関数の戻り値の型: Promise<Post[]>（Postの配列を返すPromise）
  */
-export const getPosts = async () => {
+export const getPosts = async (): Promise<Post[]> => {
   // prisma.post.findMany()：postsテーブルから複数のレコードを取得
   // awaitで非同期処理の完了を待つ（データベースからデータが返ってくるまで待機）
   const posts = await prisma.post.findMany({
