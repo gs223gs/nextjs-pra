@@ -17,12 +17,12 @@ export default function PublichHeder() {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <Link href="/">
-                  <NavigationMenuLink>home</NavigationMenuLink>
+                  <NavigationMenuLink asChild>home</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
               <NavigationMenuItem>
                 <Link href="/posts">
-                  <NavigationMenuLink>Posts</NavigationMenuLink>
+                  <NavigationMenuLink asChild>Posts</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
 
