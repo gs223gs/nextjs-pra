@@ -42,6 +42,17 @@ export const getPosts = async (): Promise<Post[]> => {
   return posts;
 };
 
+export const getPost = async (id: string): Promise<Post> => {
+  if (!id) {
+    throw new Error("ID is required");
+  }
+  const post = await prisma.post.findUnique({
+    where: { id },
+    include: { author: { select: { name: true } } },
+  });
+  return post as Post;
+};
+
 /**
  * ========================================
  * コードレビュー：良い点・悪い点・改善案
