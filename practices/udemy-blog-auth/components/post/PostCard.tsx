@@ -16,12 +16,14 @@ export default function PostCard({ post }: PostCardProps) {
       </CardHeader>
       <CardContent>
         <p>{post.content}</p>
-        <Image
-          src={post.topImage || ""}
-          alt={post.title}
-          width={100}
-          height={100}
-        />
+        {post.topImage && (
+          <Image
+            src={post.topImage}
+            alt={post.title}
+            width={100}
+            height={100}
+          />
+        )}
       </CardContent>
       <CardFooter>
         <p>{post.author.name}</p>
