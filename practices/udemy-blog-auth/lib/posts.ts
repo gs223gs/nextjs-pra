@@ -56,7 +56,7 @@ export const getPost = async (id: string): Promise<Post> => {
 export const searchPosts = async (query: string): Promise<Post[]> => {
   const decodedQuery = decodeURIComponent(query);
 
-  const normalizedQuery = decodedQuery.replace(/[\s　]+/g, "");
+  const normalizedQuery = decodedQuery.replace(/[\s　]+/g, " ").trim();
   const serchWords = normalizedQuery.split(" ").filter(Boolean);
   const filters = serchWords.map((word) => ({
     OR: [{ title: { contains: word } }, { content: { contains: word } }],
@@ -64,6 +64,7 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
 
   return await prisma.post.findMany({
     where: {
+      published: true, // ✅ 公開済みのみ
       AND: filters,
     },
     // orderBy句：並び替え条件を指定

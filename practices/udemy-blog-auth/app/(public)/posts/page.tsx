@@ -1,10 +1,15 @@
-import { getPosts } from "@/lib/posts";
+import { getPosts, searchPosts } from "@/lib/posts";
 import { Post } from "@/types/post";
 import PostCard from "@/components/post/PostCard";
 
-export default async function pages() {
-  const posts = await getPosts();
+export default async function pages({
+  searchParams,
+}: {
+  searchParams: Promise<{ query?: string }>;
+}) {
+  const { query } = await searchParams;
 
+  const posts = query ? await searchPosts(query) : await getPosts();
   return (
     <div>
       <h1>Posts</h1>

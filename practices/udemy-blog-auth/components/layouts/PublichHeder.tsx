@@ -7,8 +7,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default function PublichHeder() {
+  const handleSearch = async (formData: FormData) => {
+    "use server";
+    const query = formData.get("query") as string;
+    redirect(`/posts?query=${query}`);
+  };
+
   return (
     <div>
       <header className="border-b bg-blue-200">
@@ -25,11 +32,12 @@ export default function PublichHeder() {
                   <NavigationMenuLink asChild>Posts</NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
-
             </NavigationMenuList>
           </NavigationMenu>
           <div className="flex items-center gap-4">
-            <Input type="text" placeholder="Search" />
+            <form action={handleSearch}>
+              <Input type="text" name="query" placeholder="Search" />
+            </form>
             <Button variant="outline" asChild>
               <Link href="/login">Login</Link>
             </Button>
