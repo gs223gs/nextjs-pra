@@ -1,7 +1,7 @@
 // Prismaクライアントのインスタンスをインポート
 // @/lib/prisma は tsconfig.json で設定されたエイリアス（@はプロジェクトルートを指す）
 import { prisma } from "@/lib/prisma";
-import {Post} from "@/types/post";
+import { Post } from "@/types/post";
 /**
  * 公開済みの投稿一覧を取得する関数
  *
@@ -33,7 +33,7 @@ export const getPosts = async (): Promise<Post[]> => {
       author: {
         // select句：取得するカラムを限定
         // nameカラムのみ取得（パスワードなど不要な情報は取得しない）
-        select: { name: true }
+        select: { name: true },
       },
     },
   });
@@ -51,6 +51,38 @@ export const getPost = async (id: string): Promise<Post> => {
     include: { author: { select: { name: true } } },
   });
   return post as Post;
+};
+
+export const searchPosts = async (query: string): Promise<Post[]> => {
+  const decodedQuery = decodeURIComponent(query);
+
+  const normalizedQuery = decodedQuery.replace(/[\s　]+/g, "");
+  const serchWords = normalizedQuery.split(" ").filter(Boolean);
+  const filters = serchWords.map((word) => ({
+    OR: [{ title: { contains: word } }, { content: { contains: word } }],
+  }));
+
+  return await prisma.post.findMany({
+    where: {
+      AND: filters,
+    },
+    // orderBy句：並び替え条件を指定
+    orderBy: {
+      // createdAtカラムで降順（desc）ソート
+      // "desc" = descending（降順）：新しい投稿が先頭に来る
+      // "asc" = ascending（昇順）：古い投稿が先頭に来る
+      createdAt: "desc",
+    },
+    // include句：リレーション（関連）データを含める
+    include: {
+      // authorフィールド（Userテーブルとのリレーション）を含める
+      author: {
+        // select句：取得するカラムを限定
+        // nameカラムのみ取得（パスワードなど不要な情報は取得しない）
+        select: { name: true },
+      },
+    },
+  });
 };
 
 /**
