@@ -23,12 +23,12 @@ import bcrypt from "bcrypt";
  * TypeScriptで型安全性を保証するために必要
  */
 type User = {
-  name: string | null;  // ユーザー名（nullの可能性あり）
-  id: string;          // ユーザーID（一意の識別子）
-  email: string;       // メールアドレス
-  password: string;    // ハッシュ化されたパスワード
-  createdAt: Date;     // アカウント作成日時
-  updatedAt: Date;     // 最終更新日時
+  name: string | null; // ユーザー名（nullの可能性あり）
+  id: string; // ユーザーID（一意の識別子）
+  email: string; // メールアドレス
+  password: string; // ハッシュ化されたパスワード
+  createdAt: Date; // アカウント作成日時
+  updatedAt: Date; // 最終更新日時
 };
 
 /**
@@ -44,7 +44,7 @@ async function getUser(email: string): Promise<User | undefined> {
   // Prismaを使ってデータベースから該当メールアドレスのユーザーを検索
   // findUnique：一意の値（この場合email）で1件のレコードを検索
   const user = await prisma.user.findUnique({
-    where: { email },  // 検索条件：emailフィールドが一致するもの
+    where: { email }, // 検索条件：emailフィールドが一致するもの
   });
 
   // ユーザーが見つからなかった場合はundefinedを返す
@@ -91,10 +91,10 @@ export const { auth, signIn, signOut, handlers } = NextAuth({
         // z.string().min(8)：文字列かつ8文字以上であることを検証
         const parsedCredentials = z
           .object({
-            email: z.string().email(),     // メール形式チェック
-            password: z.string().min(8)     // 最低8文字チェック
+            email: z.string().email(), // メール形式チェック
+            password: z.string().min(8), // 最低8文字チェック
           })
-          .safeParse(credentials);  // safeParse：エラーを投げずに結果を返す
+          .safeParse(credentials); // safeParse：エラーを投げずに結果を返す
 
         // バリデーション成功時の処理
         if (parsedCredentials.success) {
