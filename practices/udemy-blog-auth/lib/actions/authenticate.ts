@@ -1,25 +1,27 @@
-'use server';
- 
-import { signIn } from '@/auth';
-import { AuthError } from 'next-auth';
- 
+"use server";
+
+import { signIn } from "@/auth";
+import { AuthError } from "next-auth";
+
 // ...
- 
+
 export async function authenticate(
   prevState: string | undefined,
-  formData: FormData,
+  formData: FormData
 ) {
   try {
-    await signIn('credentials', formData);
+    await signIn("credentials", formData);
   } catch (error) {
     if (error instanceof AuthError) {
       switch (error.type) {
-        case 'CredentialsSignin':
-          return 'mail or pass is invalid.';
+        case "CredentialsSignin":
+          return "mail or pass is invalid.";
         default:
-          return 'Something went wrong. please try again.';
+          return "Something went wrong. please try again.";
       }
     }
     throw error;
   }
 }
+
+
