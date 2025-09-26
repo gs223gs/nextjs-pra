@@ -124,7 +124,7 @@ export const createPost = async (
       errors: { auth: ["auth error"] },
     };
   }
-  console.log('publish-----------',validatedFields.data.published )
+  console.log("publish-----------", validatedFields.data.published);
   //db登録
   await prisma.post.create({
     data: {
@@ -141,6 +141,25 @@ export const createPost = async (
   return { success: true, errors: {} };
 };
 
+export const getOwnPosts = async (): Promise<Post[]> => {
+  // userid 取得
+  const session = await auth();
+  if (!session?.user?.id) {
+    redirect("/posts");
+  }
+  //db から取得
+  return await prisma.post.findMany({
+    where: {
+      authorId: session.user.id,
+    },
+    include: {
+      author: {
+        select: { name: true },
+      },
+    },
+  });
+  // return
+};
 /**
  * ========================================
  * コードレビュー：良い点・悪い点・改善案
