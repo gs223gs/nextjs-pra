@@ -1,7 +1,12 @@
+"use server";
 // Prismaクライアントのインスタンスをインポート
 // @/lib/prisma は tsconfig.json で設定されたエイリアス（@はプロジェクトルートを指す）
 import { prisma } from "@/lib/prisma";
 import { Post } from "@/types/post";
+import { redirect } from "next/navigation";
+import { postRegisterSchema, PostRegisterSchema } from "@/validations/posts";
+import { auth } from "@/auth";
+
 /**
  * 公開済みの投稿一覧を取得する関数
  *
@@ -84,6 +89,56 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
       },
     },
   });
+};
+
+type ActionState = {
+  success: boolean;
+  errors: Record<string, string[]>;
+};
+
+export const createPost = async (
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> => {
+  //form取得
+  const rawFormData = {
+    title: formData.get("title") as string,
+    content: formData.get("content") as string,
+    published: formData.get("published") === "true", // boolean変換
+  };
+  //validation
+  const validatedFields = postRegisterSchema.safeParse(rawFormData);
+  console.log(validatedFields.success);
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+  //user どうする？
+  const session = await auth();
+  console.log("userid----------------", session?.user?.id);
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      errors: { auth: ["auth error"] },
+    };
+  }
+  console.log('publish-----------',validatedFields.data.published )
+  //db登録
+  await prisma.post.create({
+    data: {
+      title: validatedFields.data.title,
+      content: validatedFields.data.content,
+      topImage: "",
+      published: validatedFields.data.published as boolean,
+      authorId: session.user.id,
+    },
+  });
+
+  //redirect
+  console.log("success!!!!!!!!!!!!!!!!!!");
+  return { success: true, errors: {} };
 };
 
 /**
