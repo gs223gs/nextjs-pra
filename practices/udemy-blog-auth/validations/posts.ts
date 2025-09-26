@@ -1,0 +1,9 @@
+import { z } from "zod";
+
+export const postRegisterSchema = z.object({
+  title: z.string().min(1, "titleは必須").max(100, "100文字以内"),
+  content: z.string().min(1, "titleは必須").max(100, "100文字以内"),
+  published: z.boolean(),
+});
+
+export type PostRegisterSchema = z.infer<typeof postRegisterSchema>;
