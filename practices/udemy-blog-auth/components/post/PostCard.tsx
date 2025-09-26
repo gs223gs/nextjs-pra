@@ -9,10 +9,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function PostCard({ post }: PostCardProps) {
+export default function PostCard({ post, href }: PostCardProps) {
   return (
     <Card>
-      <Link href={`/posts/${post.id}`}>
+      <Link href={href + post.id}>
         <CardHeader>
           <CardTitle>{post.title}</CardTitle>
         </CardHeader>

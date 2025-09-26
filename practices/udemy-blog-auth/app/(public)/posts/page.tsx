@@ -15,7 +15,7 @@ export default async function pages({
       <h1>Posts</h1>
       <ul className="space-y-4 p-4">
         {posts.map((post: Post) => (
-          <PostCard key={post.id} post={post} />
+          <PostCard key={post.id} post={post} href="/posts/" />
         ))}
       </ul>
     </div>

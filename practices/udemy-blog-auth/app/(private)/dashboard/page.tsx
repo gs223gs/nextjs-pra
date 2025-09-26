@@ -9,7 +9,13 @@ export default async function Dashboard() {
       page
       <Link href={"/dashboard/post"}>post</Link>
       {posts.map((post) => {
-        return <PostCard key={post.id} post={post}></PostCard>;
+        return (
+          <PostCard
+            key={post.id}
+            post={post}
+            href="/dashboard/post/"
+          ></PostCard>
+        );
       })}
     </div>
   );

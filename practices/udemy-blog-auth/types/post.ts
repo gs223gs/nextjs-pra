@@ -10,4 +10,4 @@ export type Post = {
   createdAt: Date;
 };
 
-export type PostCardProps = { post: Post };
+export type PostCardProps = { post: Post; href: string };
