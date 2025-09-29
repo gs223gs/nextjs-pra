@@ -4,7 +4,11 @@
 import { prisma } from "@/lib/prisma";
 import { Post } from "@/types/post";
 import { redirect } from "next/navigation";
-import { postRegisterSchema, PostRegisterSchema } from "@/validations/posts";
+import {
+  postRegisterSchema,
+  PostRegisterSchema,
+  updatePostSchema,
+} from "@/validations/posts";
 import { auth } from "@/auth";
 
 /**
@@ -93,9 +97,63 @@ export const searchPosts = async (query: string): Promise<Post[]> => {
 
 type ActionState = {
   success: boolean;
-  errors: Record<string, string[]>;
+  errors: Errors;
 };
 
+type Errors = {
+  title?: string[] | undefined;
+  content?: string[] | undefined;
+  publish?: string[] | undefined;
+  auth?: string[];
+  server?: string[];
+};
+
+export const updatePost = async (
+  prevState: ActionState,
+  formData: FormData
+): Promise<ActionState> => {
+  //form取得
+  const rawFormData = {
+    id: formData.get("id") as string,
+    title: formData.get("title") as string,
+    content: formData.get("content") as string,
+    published: formData.get("published") === "true", // boolean変換
+  };
+  //validation
+  const validatedFields = updatePostSchema.safeParse(rawFormData);
+  console.log(validatedFields.success);
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+  //user どうする？
+  const session = await auth();
+  console.log("userid----------------", session?.user?.id);
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      errors: { auth: ["auth error"] },
+    };
+  }
+  console.log("publish-----------", validatedFields.data.published);
+  //db登録
+  await prisma.post.update({
+    data: {
+      title: validatedFields.data.title,
+      content: validatedFields.data.content,
+      topImage: "",
+      published: validatedFields.data.published as boolean,
+      authorId: session.user.id,
+    },
+    where: { id: validatedFields.data.id },
+  });
+
+  //redirect
+  console.log("success!!!!!!!!!!!!!!!!!!");
+  return { success: true, errors: {} };
+};
 export const createPost = async (
   prevState: ActionState,
   formData: FormData
