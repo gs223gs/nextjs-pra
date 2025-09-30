@@ -27,6 +27,13 @@ export default function DashBoardPost({ post }: { post: Post }) {
           >
             編集
           </Button>
+          <Button
+            onClick={() => {
+              deletePost(post.id);
+            }}
+          >
+            削除
+          </Button>
         </div>
       )}
     </>
