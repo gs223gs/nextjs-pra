@@ -15,7 +15,7 @@ export default function PostEditCard({ post, onClick }: EditingProps) {
   const [editingPost, setEditingPost] = useState<Post>(post);
   return (
     <form action={formAction}>
-      <Input type="hiddun" value={post.id} name="id"></Input>
+      <Input type="hidden" value={post.id} name="id"></Input>
       title:
       <Input
         type="text"
