@@ -5,6 +5,7 @@ import { prisma } from "@/lib/prisma";
 import { Post } from "@/types/post";
 import { redirect } from "next/navigation";
 import {
+  deletePostSchema,
   postRegisterSchema,
   PostRegisterSchema,
   updatePostSchema,
@@ -167,6 +168,36 @@ export const updatePost = async (
   redirect("/dashboard");
 };
 
+export const deletePost = async (postId: string): Promise<ActionState> => {
+  //form取得
+
+  //validation
+  const validatedFields = deletePostSchema.safeParse({id:postId});
+  console.log(validatedFields.success);
+  console.log({id:postId});
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: ["そんな Postはねぇよ！"] as Errors,
+    };
+  }
+  //user どうする？
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      errors: { auth: ["auth error"] },
+    };
+  }
+  //db登録
+  await prisma.post.delete({
+    where: { id: validatedFields.data.id },
+  });
+
+  //redirect
+  console.log("success!!!!!!!!!!!!!!!!!!");
+  redirect("/dashboard");
+};
 /**
  * 新規投稿を作成するサーバーアクション。
  * フォーム値の検証とログイン確認を行い、保存成功時は呼び出し側でUI更新できるよう成功フラグを返す。
