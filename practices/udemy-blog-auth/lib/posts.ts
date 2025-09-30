@@ -51,6 +51,10 @@ export const getPosts = async (): Promise<Post[]> => {
   return posts;
 };
 
+/**
+ * 指定IDの投稿を単一取得し、著者名も一緒に返す。
+ * Prismaは未取得時にnullを返すため、呼び出し側で存在チェックが必要。
+ */
 export const getPost = async (id: string): Promise<Post> => {
   if (!id) {
     throw new Error("ID is required");
@@ -62,6 +66,10 @@ export const getPost = async (id: string): Promise<Post> => {
   return post as Post;
 };
 
+/**
+ * フリーワード検索を行い、タイトル・本文の両方を対象にAND条件で絞り込む。
+ * 複数スペースや全角スペースを正規化してから条件配列を生成する点がポイント。
+ */
 export const searchPosts = async (query: string): Promise<Post[]> => {
   const decodedQuery = decodeURIComponent(query);
 
@@ -108,6 +116,10 @@ type Errors = {
   server?: string[];
 };
 
+/**
+ * 既存投稿を更新するサーバーアクション。
+ * バリデーション・認可チェックを通過したデータのみDBに反映し、その後ダッシュボードへ遷移させる。
+ */
 export const updatePost = async (
   prevState: ActionState,
   formData: FormData
@@ -154,6 +166,11 @@ export const updatePost = async (
   console.log("success!!!!!!!!!!!!!!!!!!");
   redirect("/dashboard");
 };
+
+/**
+ * 新規投稿を作成するサーバーアクション。
+ * フォーム値の検証とログイン確認を行い、保存成功時は呼び出し側でUI更新できるよう成功フラグを返す。
+ */
 export const createPost = async (
   prevState: ActionState,
   formData: FormData
@@ -199,6 +216,10 @@ export const createPost = async (
   return { success: true, errors: {} };
 };
 
+/**
+ * ログイン中ユーザー自身の投稿のみを取得する。
+ * 未ログイン時は公開一覧へリダイレクトし、author名を含む形で返却する。
+ */
 export const getOwnPosts = async (): Promise<Post[]> => {
   // userid 取得
   const session = await auth();
