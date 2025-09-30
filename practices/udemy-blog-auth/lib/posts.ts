@@ -152,7 +152,7 @@ export const updatePost = async (
 
   //redirect
   console.log("success!!!!!!!!!!!!!!!!!!");
-  return { success: true, errors: {} };
+  redirect("/dashboard");
 };
 export const createPost = async (
   prevState: ActionState,
