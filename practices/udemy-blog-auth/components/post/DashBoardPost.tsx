@@ -4,6 +4,7 @@ import { useState } from "react";
 import PostEditCard from "./PostEditCard";
 import PostCard from "./PostCard";
 import { Button } from "../ui/button";
+import { deletePost } from "@/lib/posts";
 
 export default function DashBoardPost({ post }: { post: Post }) {
   const [isEditing, setIsEditing] = useState<boolean>(false);
