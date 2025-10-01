@@ -1,8 +1,7 @@
 import { PostCardProps } from "@/types/post";
 import Image from "next/image";
 import Link from "next/link";
-import { Button } from "../ui/button";
-import { togglePublish } from "@/lib/posts";
+import PublishToggleButton from "@/components/ui/PublishToggleButton";
 import {
   Card,
   CardContent,
@@ -31,14 +30,12 @@ export default function PostCard({ post, href }: PostCardProps) {
         </CardContent>
         <CardFooter>
           <p>{post.author.name}</p>
-          <p>
-            現在の公開状況{post.published ? <p>公開中</p> : <p>非公開です</p>}
-          </p>
-          <Button
-            onClick={() => {
-              togglePublish(post.id, post.published);
-            }}
-          ></Button>
+          <p>現在の公開状況</p>
+          {post.published ? <p>公開中</p> : <p>非公開です</p>}
+
+          <PublishToggleButton postId={post.id} publish={post.published}>
+            公開切り替え
+          </PublishToggleButton>
         </CardFooter>
       </Link>
     </Card>
