@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import {
   deletePostSchema,
   postRegisterSchema,
-  PostRegisterSchema,
+  togglePublishSchema,
   updatePostSchema,
 } from "@/validations/posts";
 import { auth } from "@/auth";
@@ -168,13 +168,52 @@ export const updatePost = async (
   redirect("/dashboard");
 };
 
+export const togglePublish = async (
+  postId: string,
+  publish: boolean
+): Promise<ActionState> => {
+  //form取得
+
+  //validation
+  const validatedFields = togglePublishSchema.safeParse({
+    id: postId,
+    publish: publish,
+  });
+  console.log(validatedFields.success);
+  console.log({ id: postId, publish: publish });
+  if (!validatedFields.success) {
+    return {
+      success: false,
+      errors: ["そんな Postはねぇよ！"] as Errors,
+    };
+  }
+  //user どうする？
+  const session = await auth();
+  if (!session?.user?.id) {
+    return {
+      success: false,
+      errors: { auth: ["auth error"] },
+    };
+  }
+  //db登録
+  await prisma.post.update({
+    data: {
+      published: !validatedFields.data.publish,
+    },
+    where: { id: validatedFields.data.id },
+  });
+
+  //redirect
+  console.log("success!!!!!!!!!!!!!!!!!!");
+  redirect("/dashboard");
+};
 export const deletePost = async (postId: string): Promise<ActionState> => {
   //form取得
 
   //validation
-  const validatedFields = deletePostSchema.safeParse({id:postId});
+  const validatedFields = deletePostSchema.safeParse({ id: postId });
   console.log(validatedFields.success);
-  console.log({id:postId});
+  console.log({ id: postId });
   if (!validatedFields.success) {
     return {
       success: false,

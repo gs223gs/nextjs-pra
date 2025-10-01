@@ -17,8 +17,11 @@ export const deletePostSchema = z.object({
   id: z.string(),
 });
 
+export const togglePublishSchema = z.object({
+  id: z.string(),
+  publish: z.boolean(),
+});
+
 export type PostRegisterSchema = z.infer<typeof postRegisterSchema>;
 
 export type PostFormErrors = z.inferFlattenedErrors<typeof postRegisterSchema>;
-
-
