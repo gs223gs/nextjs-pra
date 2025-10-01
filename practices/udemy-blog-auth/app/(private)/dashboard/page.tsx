@@ -1,4 +1,4 @@
-import DashBoardPostCard from "@/components/post/PostCard";
+import DashBoardPostCard from "@/components/post/DashBoardPostCard";
 import { getOwnPosts } from "@/lib/posts";
 import Link from "next/link";
 
