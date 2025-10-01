@@ -1,4 +1,4 @@
-import PostCard from "@/components/post/PostCard";
+import DashBoardPostCard from "@/components/post/PostCard";
 import { getOwnPosts } from "@/lib/posts";
 import Link from "next/link";
 
@@ -10,11 +10,11 @@ export default async function Dashboard() {
       <Link href={"/dashboard/post"}>post</Link>
       {posts.map((post) => {
         return (
-          <PostCard
+          <DashBoardPostCard
             key={post.id}
             post={post}
             href="/dashboard/post/"
-          ></PostCard>
+          ></DashBoardPostCard>
         );
       })}
     </div>
