@@ -25,12 +25,13 @@ datasource db {
   // データベースの種類（SQLite）
   // 他にもpostgresql、mysql、sqlserver、mongodbなどが使用可能
   // JavaのJDBCドライバーの指定に相当
-  provider = "sqlite"
+  provider = "postgresql"
 
   // データベース接続URL（環境変数から取得）
   // env()関数で.envファイルから環境変数を読み込む
   // JavaのDataSourceやConnectionStringの設定に相当
-  url = env("DATABASE_URL")
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ====================================================================
